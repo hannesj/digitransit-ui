@@ -162,7 +162,7 @@
     "stats-webpack-plugin": "0.6.1",
     "style-loader": "0.19.1",
     "stylelint": "7.8.0",
-    "stylelint-scss": "1.4.1",
+    "stylelint-scss": "2.4.0",
     "uglifyjs-webpack-plugin": "1.1.4",
     "url-loader": "0.6.2",
     "webpack": "3.11.0",
