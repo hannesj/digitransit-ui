@@ -335,7 +335,7 @@ export function getSearchResults(
     }
     if (allSources || sources.includes('Datasource')) {
       const regex = minimalRegexp || undefined;
-      const geocodingLayers = ['station', 'venue', 'address', 'street'];
+      const geocodingLayers = ['venue', 'address', 'street'];
       const feedis = feedIDs.map(v => `gtfs${v}`);
       const geosources = geocodingSources.concat(feedis).join(',');
       searchComponents.push(
@@ -395,7 +395,7 @@ export function getSearchResults(
       }
       searchComponents.push(getFavouriteStops(stopsAndStations, input));
     }
-    if (allSources || sources.includes('Datasource')) {
+    if (false) {
       const regex = minimalRegexp || undefined;
       const geocodingLayers = ['stop', 'station'];
       const searchParams = {
