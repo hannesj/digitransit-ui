@@ -4,24 +4,25 @@ import { matchShape, routerShape } from 'found';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import ComponentUsageExample from './ComponentUsageExample';
 import { isBrowser } from '../util/browser';
+import { setLanguage } from '../action/userPreferencesActions';
 
-const language = (lang, highlight, match) => (
-  <a
+const language = (lang, highlight, executeAction) => (
+  <button
     id={`lang-${lang}`}
     key={lang}
-    href={`/${lang}${match.location.pathname}${match.location.search}`}
+    onClick={() => executeAction(setLanguage, lang)}
     className={`${(highlight && 'selected') || ''} noborder lang`}
   >
     {lang}
-  </a>
+  </button>
 );
 
-const LangSelect = ({ currentLanguage }, { config, match }) => {
+const LangSelect = ({ currentLanguage }, { config, executeAction }) => {
   if (isBrowser) {
     return (
       <div key="lang-select" id="lang-select">
         {config.availableLanguages.map(lang =>
-          language(lang, lang === currentLanguage, match),
+          language(lang, lang === currentLanguage, executeAction),
         )}
       </div>
     );
