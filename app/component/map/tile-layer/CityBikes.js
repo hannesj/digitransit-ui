@@ -14,6 +14,7 @@ import {
 } from '../../../util/citybikes';
 
 const timeOfLastFetch = {};
+const layerName = 'bikes';
 
 const query = graphql`
   query CityBikesQuery($id: String!) {
@@ -56,13 +57,13 @@ class CityBikes {
 
           this.features = [];
 
-          if (vt.layers.stations != null) {
+          if (vt.layers[layerName] != null) {
             for (
-              let i = 0, ref = vt.layers.stations.length - 1;
+              let i = 0, ref = vt.layers[layerName].length - 1;
               i <= ref;
               i++
             ) {
-              const feature = vt.layers.stations.feature(i);
+              const feature = vt.layers[layerName].feature(i);
               [[feature.geom]] = feature.loadGeometry();
               this.features.push(pick(feature, ['geom', 'properties']));
             }
