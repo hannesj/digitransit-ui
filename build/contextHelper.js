@@ -35,10 +35,14 @@ function getEntries(theme, sprites) {
   if (!fs.existsSync(themeCss)) {
     themeCss = './sass/themes/default/main.scss';
   }
-  return {
-    [`${theme}_theme`]: themeCss,
-    [sprites]: `./static/${sprites}`,
-  };
+  return sprites
+    ? {
+        [`${theme}_theme`]: themeCss,
+        [sprites]: `./static/${sprites}`,
+      }
+    : {
+        [`${theme}_theme`]: themeCss,
+      };
 }
 
 function getAllThemeEntries() {
