@@ -5,7 +5,7 @@ import { BIKEAVL_WITHMAX } from '../util/citybikes';
 const CONFIG = process.env.CONFIG || 'default';
 const API_URL = process.env.API_URL || 'https://api.cityrouting.e-gpp.hr';
 const GEOCODING_BASE_URL = `${API_URL}/geocoding/v1`;
-const MAP_URL = process.env.MAP_URL || 'https://maps.wikimedia.org/osm-intl/';
+const MAP_URL = process.env.MAP_URL || 'https://api.maptiler.com/maps/basic/';
 const APP_PATH = process.env.APP_CONTEXT || '';
 const { SENTRY_DSN } = process.env;
 const PORT = process.env.PORT || 8080;
@@ -33,10 +33,10 @@ export default {
     API_URL,
     ASSET_URL: process.env.ASSET_URL,
     MAP_URL,
-    OTP: `http://localhost:8080/otp/routers/default/`,
+    OTP: `http://165.227.170.138/otp/routers/default/`,
     MAP: { default: MAP_URL },
-    STOP_MAP: `http://localhost:8080/otp/routers/default/vectorTiles/stations,stops/`,
-    CITYBIKE_MAP: `http://localhost:8080/otp/routers/default/vectorTiles/bikes/`,
+    STOP_MAP: `http://165.227.170.138/otp/routers/default/vectorTiles/stations,stops/`,
+    CITYBIKE_MAP: `http://165.227.170.138/otp/routers/default/vectorTiles/bikes/`,
     FONT:
       'https://fonts.googleapis.com/css?family=Lato:300,400,900%7CPT+Sans+Narrow:400,700',
     PELIAS: `${process.env.GEOCODING_BASE_URL || GEOCODING_BASE_URL}/search`,
@@ -190,8 +190,8 @@ export default {
 
   map: {
     useRetinaTiles: true,
-    tileSize: 256,
-    zoomOffset: 0,
+    tileSize: 512,
+    zoomOffset: -1,
     minZoom: 9,
     maxZoom: 18,
     controls: {
