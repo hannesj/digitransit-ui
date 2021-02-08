@@ -1,0 +1,23 @@
+/* matka.fi theme */
+
+/* Base theme */
+@import '../matka/theme';
+
+$osijek-blue: #285cab;
+$livi-blue: $osijek-blue;
+$primary-color: $osijek-blue;
+$secondary-color: darken($primary-color, 20%);
+$hilight-color: $primary-color;
+$action-color: $primary-color;
+$bus-color: $primary-color;
+$viewpoint-marker-color: $primary-color;
+$current-location-color: $primary-color;
+
+$standalone-btn-color: $primary-color;
+$link-color: $primary-color;
+
+/*Component palette*/
+$desktop-title-color: $primary-color;
+$desktop-title-arrow-icon-color: $secondary-color;
+
+$spinner-image: url('./default-spinner.png');

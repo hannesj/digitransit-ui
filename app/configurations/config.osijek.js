@@ -1,8 +1,9 @@
 /* eslint-disable prefer-template */
 import safeJsonParse from '../util/safeJsonParser';
-import { BIKEAVL_WITHMAX } from '../util/citybikes';
+import { BIKEAVL_UNKNOWN } from '../util/citybikes';
 
 const CONFIG = 'osijek';
+const APP_TITLE = 'Digitransit - Grad Osijek';
 const API_URL = process.env.API_URL || 'https://api.cityrouting.e-gpp.hr';
 const GEOCODING_BASE_URL = `${API_URL}/geocoding/v1`;
 const MAP_URL = process.env.MAP_URL || 'https://api.maptiler.com/maps/basic/';
@@ -52,13 +53,22 @@ export default {
       'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3',
   },
 
+  appBarLinks: [
+    { name: 'Grad Osijek', href: 'https://www.osijek.hr/' },
+    { name: 'GPP', href: 'http://www.gpp-osijek.com/' },
+    { name: 'HŽPP', href: 'https://prodaja.hzpp.hr/' },
+    { name: 'Flixbus', href: 'https://global.flixbus.com/' },
+  ],
+
   APP_PATH: `${APP_PATH}`,
   indexPath: '',
-  title: 'Reittihaku',
+  title: APP_TITLE,
 
   textLogo: false,
   // Navbar logo
-  logo: 'default/digitransit-logo.png',
+  logo: 'osijek/logo.png',
+
+  favicon: './app/configurations/images/osijek/favicon.png',
 
   contactName: {
     sv: 'Digitransit',
@@ -67,10 +77,15 @@ export default {
   },
 
   // Default labels for manifest creation
-  name: 'Digitransit beta',
+  name: APP_TITLE,
   shortName: 'Digitransit',
 
-  searchParams: {},
+  searchParams: {
+    'boundary.rect.min_lat': minLat,
+    'boundary.rect.max_lat': maxLat,
+    'boundary.rect.min_lon': minLon,
+    'boundary.rect.max_lon': maxLon,
+  },
   feedIds: [],
 
   realTime: realtime,
@@ -85,7 +100,7 @@ export default {
    * by default search endpoints from all but gtfs sources, correct gtfs source
    * figured based on feedIds config variable
    */
-  searchSources: ['openstreetmap'],
+  searchSources: ['osm', 'openstreetmap'],
 
   search: {
     suggestions: {
@@ -156,14 +171,14 @@ export default {
   defaultLanguage: 'hr',
   // This timezone data will expire in 2037
   timezoneData:
-    'Europe/Helsinki|EET EEST|-20 -30|0101010101010101010101010101010101010|22k10 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00|12e5',
+    'Europe/Belgrade|CET CEST|-10 -20|01010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-19RC0 3IP0 WM0 1fA0 1cM0 1cM0 1rc0 Qo0 1vmo0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00|12e5',
 
   allowLogin: false,
   mainMenu: {
     // Whether to show the left menu toggle button at all
     show: true,
-    showDisruptions: true,
-    showLoginCreateAccount: true,
+    showDisruptions: false,
+    showLoginCreateAccount: false,
     showOffCanvasList: true,
   },
 
@@ -265,33 +280,29 @@ export default {
       'osijek-bikes': {
         icon: 'citybike',
         name: {
-          fi: 'Helsinki ja Espoo',
-          sv: 'Helsingfors och Esbo',
+          hr: 'Osijek Bike Share',
           en: 'Osijek Bike Share',
         },
         type: 'citybike',
         url: {
-          fi: 'https://kaupunkipyorat.hsl.fi/fi',
-          sv: 'https://kaupunkipyorat.hsl.fi/sv',
-          en: 'https://kaupunkipyorat.hsl.fi/en',
+          hr: 'https://gpp-osijek.com/',
+          en: 'https://gpp-osijek.com/',
         },
       },
       'osijek-cars': {
         icon: 'citybike-secondary',
         name: {
-          fi: 'Helsinki ja Espoo',
-          sv: 'Helsingfors och Esbo',
+          hr: 'Osijek Car Share',
           en: 'Osijek Car Share',
         },
         type: 'citybike',
         url: {
-          fi: 'https://kaupunkipyorat.hsl.fi/fi',
-          sv: 'https://kaupunkipyorat.hsl.fi/sv',
-          en: 'https://kaupunkipyorat.hsl.fi/en',
+          hr: 'https://gpp-osijek.com/',
+          en: 'https://gpp-osijek.com/',
         },
       },
     },
-    capacity: BIKEAVL_WITHMAX,
+    capacity: BIKEAVL_UNKNOWN,
   },
 
   // Lowest level for stops and terminals are rendered
@@ -314,7 +325,7 @@ export default {
   appBarStyle: 'default', // DT-3375
 
   colors: {
-    primary: '#00AFFF',
+    primary: '#285cab',
   },
 
   sprites: 'assets/svg-sprite.default.svg',
@@ -328,20 +339,8 @@ export default {
   },
 
   socialMedia: {
-    title: 'Digitransit',
+    title: APP_TITLE,
     description: APP_DESCRIPTION,
-    locale: 'en_US',
-
-    image: {
-      url: '/img/default-social-share.png',
-      width: 2400,
-      height: 1260,
-    },
-
-    twitter: {
-      card: 'summary_large_image',
-      site: '@hsldevcom',
-    },
   },
 
   meta: {
@@ -393,18 +392,18 @@ export default {
     },
 
     subway: {
-      availableForSelection: true,
-      defaultValue: true,
+      availableForSelection: false,
+      defaultValue: false,
     },
 
     airplane: {
-      availableForSelection: true,
-      defaultValue: true,
+      availableForSelection: false,
+      defaultValue: false,
     },
 
     ferry: {
-      availableForSelection: true,
-      defaultValue: true,
+      availableForSelection: false,
+      defaultValue: false,
     },
 
     citybike: {
@@ -444,7 +443,7 @@ export default {
     },
 
     ticketOptions: {
-      available: true,
+      available: false,
     },
 
     accessibility: {
@@ -473,18 +472,19 @@ export default {
 
   footer: {
     content: [
-      { label: `© HSL, Traficom ${YEAR}` },
+      { label: `© Grad Osijek ${YEAR}` },
+      // Spacer
       {},
       {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
-        href: 'https://github.com/HSLdevcom/digitransit-ui/issues',
+        href: 'mailto:info@osijek.hr',
         icon: 'icon-icon_speech-bubble',
       },
       {
         name: 'about-this-service',
         nameEn: 'About this service',
-        route: '/tietoja-palvelusta',
+        route: '/o-usluzi',
         icon: 'icon-icon_info',
       },
     ],
@@ -528,44 +528,11 @@ export default {
   routeTimetableUrlResolver: {},
 
   aboutThisService: {
-    fi: [
+    hr: [
       {
-        header: 'Tietoja palvelusta',
+        header: 'O usluzi',
         paragraphs: [
-          'Palvelu kattaa joukkoliikenteen, kävelyn, pyöräilyn ja yksityisautoilun rajatuilta osin. Palvelu perustuu Digitransit-palvelualustaan.',
-        ],
-      },
-      {
-        header: 'Digitransit-palvelualusta',
-        paragraphs: [
-          'Digitransit-palvelualusta on HSL:n ja Traficomin kehittämä avoimen lähdekoodin reititystuote.',
-        ],
-      },
-      {
-        header: 'Tietolähteet',
-        paragraphs: [
-          'Kartat, tiedot kaduista, rakennuksista, pysäkkien sijainnista ynnä muusta tarjoaa © OpenStreetMap contributors. Osoitetiedot tuodaan Väestörekisterikeskuksen rakennustietorekisteristä. Joukkoliikenteen reitit ja aikataulut ladataan Traficomin valtakunnallisesta joukkoliikenteen tietokannasta.',
-        ],
-      },
-    ],
-
-    sv: [
-      {
-        header: 'Om tjänsten',
-        paragraphs: [
-          'Reseplaneraren täcker med vissa begränsningar kollektivtrafik, promenad, cykling samt privatbilism. Tjänsten baserar sig på Digitransit-plattformen.',
-        ],
-      },
-      {
-        header: 'Digitransit-plattformen',
-        paragraphs: [
-          'Digitransit-plattformen är en öppen programvara utvecklad av HRT och Traficom.',
-        ],
-      },
-      {
-        header: 'Datakällor',
-        paragraphs: [
-          'Kartor, gator, byggnader, hållplatser och dylik information erbjuds av © OpenStreetMap contributors. Addressinformation hämtas från BRC:s byggnadsinformationsregister. Kollektivtrafikens rutter och tidtabeller hämtas från Traficoms landsomfattande kollektivtrafiksdatabas.',
+          'Ovu uslugu nudi Grad Osijek za planiranje putovanja unutar urbane Aglomeracije grada. Usluga pokriva javni, željeznički, međugradski prijevoz te pješačke rute. Usluga je temeljena na Digitransit sustavu.',
         ],
       },
     ],
@@ -574,25 +541,10 @@ export default {
       {
         header: 'About this service',
         paragraphs: [
-          'The service covers public transport, walking, cycling, and some private car use. Service is built on Digitransit platform.',
-        ],
-      },
-      {
-        header: 'Digitransit platform',
-        paragraphs: [
-          'The Digitransit service platform is an open source routing platform developed by HSL and Traficom.',
-        ],
-      },
-      {
-        header: 'Data sources',
-        paragraphs: [
-          "Maps, streets, buildings, stop locations etc. are provided by © OpenStreetMap contributors. Address data is retrieved from the Building and Dwelling Register of the Finnish Population Register Center. Public transport routes and timetables are downloaded from Traficom's national public transit database.",
+          'This service is provided by City of Osijek for route planning in Osijek-Baranja region. The service covers public transport, train, intercity bus and walking. Service is built on Digitransit platform.',
         ],
       },
     ],
-    nb: {},
-    fr: {},
-    de: {},
   },
 
   staticMessages: [],
@@ -603,28 +555,6 @@ export default {
       priority: -1,
       shouldTrigger: true,
       content: {
-        fi: [
-          {
-            type: 'text',
-            content:
-              'Palvelu ei tue käyttämääsi selainta. Päivitä selainohjelmasi tai lataa uusi selain oheisista linkeistä.\n',
-          },
-          {
-            type: 'a',
-            content: 'Google Chrome',
-            href: 'https://www.google.com/chrome/',
-          },
-          {
-            type: 'a',
-            content: 'Firefox',
-            href: 'https://www.mozilla.org/fi/firefox/new/',
-          },
-          {
-            type: 'a',
-            content: 'Microsoft Edge',
-            href: 'https://www.microsoft.com/en-us/windows/microsoft-edge',
-          },
-        ],
         en: [
           {
             type: 'text',
@@ -647,11 +577,12 @@ export default {
             href: 'https://www.microsoft.com/en-us/windows/microsoft-edge',
           },
         ],
-        sv: [
+
+        hr: [
           {
             type: 'text',
             content:
-              'Tjänsten stöder inte den webbläsare som du har i bruk. Uppdatera din webbläsare eller ladda ner en ny webbläsare via nedanstående länk.\n',
+              'The service does not support the browser you are using. Update your browser or download a new browser using the links below.\n',
           },
           {
             type: 'a',
@@ -661,7 +592,7 @@ export default {
           {
             type: 'a',
             content: 'Firefox',
-            href: 'https://www.mozilla.org/sv-SE/firefox/new/',
+            href: 'https://www.mozilla.org/fi/firefox/new/',
           },
           {
             type: 'a',
