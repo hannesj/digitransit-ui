@@ -227,8 +227,8 @@ class DTAutosuggest extends React.Component {
     hoverColor: '#0062a1',
     timeZone: 'Europe/Helsinki',
     pathOpts: {
-      routesPrefix: 'linjat',
-      stopsPrefix: 'pysakit',
+      routesPrefix: 'ruta',
+      stopsPrefix: 'stajaliste',
     },
     mobileLabel: undefined,
   };

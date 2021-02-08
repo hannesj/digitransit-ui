@@ -5,16 +5,16 @@ import {
   addressToItinerarySearch,
 } from './otpStrings';
 
-export const TAB_NEARBY = 'lahellasi';
-export const TAB_FAVOURITES = 'suosikit';
-export const PREFIX_ROUTES = 'linjat';
+export const TAB_NEARBY = 'u-blizini';
+export const TAB_FAVOURITES = 'favoriti';
+export const PREFIX_ROUTES = 'ruta';
 export const PREFIX_NEARYOU = TAB_NEARBY;
-export const PREFIX_STOPS = 'pysakit';
-export const PREFIX_BIKESTATIONS = 'pyoraasemat';
-export const PREFIX_TERMINALS = 'terminaalit';
-export const PREFIX_ITINERARY_SUMMARY = 'reitti';
-export const PREFIX_DISRUPTION = 'hairiot';
-export const PREFIX_TIMETABLE = 'aikataulu';
+export const PREFIX_STOPS = 'stajaliste';
+export const PREFIX_BIKESTATIONS = 'iznajmljivanje';
+export const PREFIX_TERMINALS = 'terminal';
+export const PREFIX_ITINERARY_SUMMARY = 'putovanje';
+export const PREFIX_DISRUPTION = 'upozorenja';
+export const PREFIX_TIMETABLE = 'vozni-red';
 export const stopUrl = id => id;
 export const LOCAL_STORAGE_EMITTER_PATH = '/local-storage-emitter';
 
