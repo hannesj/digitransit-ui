@@ -34,6 +34,7 @@ import scrollTop from '../util/scroll';
 import FavouritesContainer from './FavouritesContainer';
 import DatetimepickerContainer from './DatetimepickerContainer';
 import { LightenDarkenColor } from '../util/colorUtils';
+import { getRefPoint } from '../util/apiUtils';
 
 const StopRouteSearch = withSearchContext(DTAutoSuggest);
 const LocationSearch = withSearchContext(DTAutosuggestPanel);
@@ -58,6 +59,7 @@ class IndexPage extends React.Component {
     query: PropTypes.object.isRequired,
     favouriteModalAction: PropTypes.string,
     fromMap: PropTypes.string,
+    locationState: dtLocationShape.isRequired,
   };
 
   static defaultProps = { lang: 'fi' };
@@ -185,14 +187,7 @@ class IndexPage extends React.Component {
     const origin = this.pendingOrigin || this.props.origin;
     const destination = this.pendingDestination || this.props.destination;
     const queryString = this.context.match.location.search;
-    const searchSources = ['Favourite', 'History', 'Datasource'];
-    const stopAndRouteSearchSources = ['Favourite', 'History', 'Datasource'];
-    const locationSearchTargets = [
-      'Locations',
-      'CurrentPosition',
-      'FutureRoutes',
-      'Stops',
-    ];
+    const sources = ['Favourite', 'History', 'Datasource'];
     const stopAndRouteSearchTargets =
       this.context.config.cityBike && this.context.config.cityBike.showCityBikes
         ? ['Stops', 'Routes', 'BikeRentalStations']
@@ -212,6 +207,41 @@ class IndexPage extends React.Component {
     const showSpinner =
       (origin.type === 'CurrentLocation' && !origin.address) ||
       (destination.type === 'CurrentLocation' && !destination.address);
+    const refPoint = getRefPoint(origin, destination, this.props.locationState);
+    const locationSearchProps = {
+      appElement: '#app',
+      origin,
+      destination,
+      lang,
+      sources,
+      color,
+      hoverColor,
+      refPoint,
+      searchPanelText: intl.formatMessage({
+        id: 'where',
+        defaultMessage: 'Where to?',
+      }),
+      originPlaceHolder: 'search-origin-index',
+      destinationPlaceHolder: 'search-destination-index',
+      selectHandler: this.onSelectLocation,
+      onGeolocationStart: this.onSelectLocation,
+      fromMap: this.props.fromMap,
+    };
+
+    const stopRouteSearchProps = {
+      appElement: '#app',
+      icon: 'search',
+      id: 'stop-route-station',
+      className: 'destination',
+      placeholder: 'stop-near-you',
+      selectHandler: this.onSelectStopRoute,
+      value: '',
+      lang,
+      color,
+      hoverColor,
+      sources,
+      targets: stopAndRouteSearchTargets,
+    };
 
     return breakpoint === 'large' ? (
       <div
@@ -230,23 +260,13 @@ class IndexPage extends React.Component {
             position="left"
           >
             <LocationSearch
-              appElement="#app"
-              searchPanelText={intl.formatMessage({
-                id: 'where',
-                defaultMessage: 'Where to?',
-              })}
-              origin={origin}
-              destination={destination}
-              originPlaceHolder="search-origin-index"
-              destinationPlaceHolder="search-destination-index"
-              lang={lang}
-              sources={searchSources}
-              targets={locationSearchTargets}
-              breakpoint="large"
-              color={color}
-              hoverColor={hoverColor}
-              selectHandler={this.onSelectLocation}
-              fromMap={this.props.fromMap}
+              targets={[
+                'Locations',
+                'CurrentPosition',
+                'FutureRoutes',
+                'Stops',
+              ]}
+              {...locationSearchProps}
             />
             <div className="datetimepicker-container">
               <DatetimepickerContainer realtime color={color} />
@@ -281,21 +301,7 @@ class IndexPage extends React.Component {
                 </h2>
               </div>
             )}
-            <StopRouteSearch
-              appElement="#app"
-              icon="search"
-              id="stop-route-station"
-              refPoint={origin}
-              className="destination"
-              placeholder="stop-near-you"
-              value=""
-              lang={lang}
-              sources={stopAndRouteSearchSources}
-              targets={stopAndRouteSearchTargets}
-              color={color}
-              hoverColor={hoverColor}
-              selectHandler={this.onSelectStopRoute}
-            />
+            <StopRouteSearch {...stopRouteSearchProps} />
             <CtrlPanel.SeparatorLine />
             {!trafficNowLink ||
               (trafficNowLink[lang] !== '' && (
@@ -323,17 +329,6 @@ class IndexPage extends React.Component {
         >
           <CtrlPanel instance="hsl" language={lang} position="bottom">
             <LocationSearch
-              appElement="#app"
-              searchPanelText={intl.formatMessage({
-                id: 'where',
-                defaultMessage: 'Where to?',
-              })}
-              origin={origin}
-              destination={destination}
-              originPlaceHolder="search-origin-index"
-              destinationPlaceHolder="search-destination-index"
-              lang={lang}
-              sources={searchSources}
               targets={[
                 'Locations',
                 'CurrentPosition',
@@ -343,11 +338,7 @@ class IndexPage extends React.Component {
               ]}
               disableAutoFocus
               isMobile
-              breakpoint="small"
-              fromMap={this.props.fromMap}
-              color={color}
-              hoverColor={hoverColor}
-              selectHandler={this.onSelectLocation}
+              {...locationSearchProps}
             />
             <div className="datetimepicker-container">
               <DatetimepickerContainer realtime color={color} />
@@ -382,23 +373,10 @@ class IndexPage extends React.Component {
                 </h2>
               </div>
             )}
-            <StopRouteSearch
-              appElement="#app"
-              icon="search"
-              id="stop-route-station"
-              refPoint={origin}
-              className="destination"
-              placeholder="stop-near-you"
-              lang={lang}
-              value=""
-              sources={stopAndRouteSearchSources}
-              targets={stopAndRouteSearchTargets}
-              isMobile
-              color={color}
-              hoverColor={hoverColor}
-              selectHandler={this.onSelectStopRoute}
-            />
-            <CtrlPanel.SeparatorLine />
+            <div className="stop-route-search-container">
+              <StopRouteSearch isMobile {...stopRouteSearchProps} />
+            </div>
+            <CtrlPanel.SeparatorLine usePaddingBottom20 />
             {!trafficNowLink ||
               (trafficNowLink[lang] !== '' && (
                 <TrafficNowLink
@@ -421,7 +399,8 @@ const Index = shouldUpdate(
       isEqual(nextProps.destination, props.destination) &&
       isEqual(nextProps.breakpoint, props.breakpoint) &&
       isEqual(nextProps.lang, props.lang) &&
-      isEqual(nextProps.query, props.query)
+      isEqual(nextProps.query, props.query) &&
+      isEqual(nextProps.locationState, props.locationState)
     );
   },
 )(IndexPage);
@@ -436,14 +415,23 @@ IndexPageWithBreakpoint.description = (
 
 const IndexPageWithStores = connectToStores(
   IndexPageWithBreakpoint,
-  ['OriginStore', 'DestinationStore', 'TimeStore', 'PreferencesStore'],
+  [
+    'OriginStore',
+    'DestinationStore',
+    'TimeStore',
+    'PreferencesStore',
+    'PositionStore',
+  ],
   (context, props) => {
     const origin = context.getStore('OriginStore').getOrigin();
     const destination = context.getStore('DestinationStore').getDestination();
+    const locationState = context.getStore('PositionStore').getLocationState();
     const { location } = props.match;
     const newProps = {};
     const { query } = location;
     const { favouriteModalAction, fromMap } = query;
+    newProps.locationState = locationState;
+
     if (favouriteModalAction) {
       newProps.favouriteModalAction = favouriteModalAction;
     }

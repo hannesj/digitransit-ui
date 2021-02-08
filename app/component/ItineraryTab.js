@@ -103,7 +103,6 @@ class ItineraryTab extends React.Component {
                       />
                     }
                     icon="icon-icon_arrow-collapse--left"
-                    color={config.colors.primary}
                     iconClassName="arrow-icon"
                   />
                   <ItinerarySummary itinerary={itinerary} key="summary" />
@@ -315,26 +314,6 @@ const withRelay = createFragmentContainer(ItineraryTab, {
             code
             platformCode
             zoneId
-            alerts {
-              alertSeverityLevel
-              effectiveEndDate
-              effectiveStartDate
-              trip {
-                pattern {
-                  code
-                }
-              }
-              alertHeaderText
-              alertHeaderTextTranslations {
-                text
-                language
-              }
-              alertUrl
-              alertUrlTranslations {
-                text
-                language
-              }
-            }
           }
         }
         realTime

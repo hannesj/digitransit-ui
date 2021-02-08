@@ -33,13 +33,19 @@ export default function withSearchContext(WrappedComponent) {
     };
 
     static propTypes = {
-      origin: PropTypes.object,
-      destination: PropTypes.object,
-      children: PropTypes.node,
       selectHandler: PropTypes.func.isRequired,
-      locationState: PropTypes.object,
+      locationState: PropTypes.object.isRequired,
+      onGeolocationStart: PropTypes.func,
       fromMap: PropTypes.string,
       isMobile: PropTypes.bool,
+      showMultiPointControls: PropTypes.bool,
+    };
+
+    static defaultProps = {
+      onGeolocationStart: null,
+      fromMap: undefined,
+      isMobile: false,
+      showMultiPointControls: false,
     };
 
     constructor(props) {
@@ -84,22 +90,8 @@ export default function withSearchContext(WrappedComponent) {
         const locState = this.props.locationState;
 
         if (locState.status === 'found-address') {
-          const location = {
-            type: 'CurrentLocation',
-            lat: locState.lat,
-            lon: locState.lon,
-            gid: locState.gid,
-            name: locState.name,
-            layer: locState.layer,
-            address:
-              locState.address ||
-              this.context.intl.formatMessage({
-                id: 'own-position',
-                defaultMessage: 'Own Location',
-              }),
-          };
           this.onSuggestionSelected(
-            location,
+            locState,
             prevState.positioningSelectedFrom,
           );
         }
@@ -116,7 +108,7 @@ export default function withSearchContext(WrappedComponent) {
         item.type !== 'CurrentLocation' &&
         item.type !== 'SelectFromMap' &&
         item.type.indexOf('Favourite') === -1 &&
-        id.indexOf('favourite') === -1 &&
+        id !== 'favourite' &&
         (!item.properties ||
           !item.properties.layer ||
           item.properties.layer.indexOf('favourite') === -1)
@@ -146,6 +138,16 @@ export default function withSearchContext(WrappedComponent) {
               { pendingCurrentLocation: true, positioningSelectedFrom: id },
               this.context.executeAction(searchContext.startLocationWatch),
             );
+            if (this.props.onGeolocationStart) {
+              this.props.onGeolocationStart(item, id);
+            }
+            return;
+          }
+          if (!location.address) {
+            location.address = this.context.intl.formatMessage({
+              id: 'own-position',
+              defaultMessage: 'Own Location',
+            });
           }
         } else {
           location = suggestionToLocation(item);
@@ -186,8 +188,9 @@ export default function withSearchContext(WrappedComponent) {
     };
 
     confirmMapSelection = (type, mapLocation) => {
-      this.setState({ fromMap: undefined });
-      this.props.selectHandler(mapLocation, type);
+      this.setState({ fromMap: undefined }, () =>
+        this.props.selectHandler(mapLocation, type),
+      );
     };
 
     renderSelectFromMapModal = id => {
@@ -195,10 +198,11 @@ export default function withSearchContext(WrappedComponent) {
 
       if (id === 'origin') {
         titleId = 'select-from-map-origin';
-      }
-
-      if (id === 'destination') {
+      } else if (id === 'destination') {
         titleId = 'select-from-map-destination';
+      } else if (id === parseInt(id, 10)) {
+        // id = via point index
+        titleId = 'select-from-map-viaPoint';
       }
 
       if (!this.props.isMobile) {
@@ -233,10 +237,13 @@ export default function withSearchContext(WrappedComponent) {
     render() {
       const { fromMap } = this.state;
 
-      if (fromMap) {
+      if (fromMap !== undefined) {
         return this.renderSelectFromMapModal(fromMap);
       }
 
+      const viaProps = this.props.showMultiPointControls
+        ? { handleViaPointLocationSelected: this.onSelect }
+        : {};
       return (
         <WrappedComponent
           appElement="#app"
@@ -244,6 +251,7 @@ export default function withSearchContext(WrappedComponent) {
           addAnalyticsEvent={addAnalyticsEvent}
           onSelect={this.onSelect}
           {...this.props}
+          {...viaProps}
           pathOpts={PATH_OPTS}
         />
       );

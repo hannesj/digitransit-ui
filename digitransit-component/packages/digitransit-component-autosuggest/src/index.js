@@ -6,7 +6,6 @@ import cx from 'classnames';
 import Autosuggest from 'react-autosuggest';
 import { executeSearch } from '@digitransit-search-util/digitransit-search-util-execute-search-immidiate';
 import SuggestionItem from '@digitransit-component/digitransit-component-suggestion-item';
-import suggestionToLocation from '@digitransit-search-util/digitransit-search-util-suggestion-to-location';
 import {
   getNameLabel,
   getStopCode,
@@ -22,11 +21,11 @@ import isEmpty from 'lodash/isEmpty';
 import translations from './helpers/translations';
 import styles from './helpers/styles.scss';
 import MobileSearch from './helpers/MobileSearch';
+import withScrollLock from './helpers/withScrollLock';
 
 moment.locale('en');
 
 i18next.init({
-  lng: 'fi',
   fallbackLng: 'fi',
   defaultNS: 'translation',
   interpolation: {
@@ -83,13 +82,16 @@ function getSuggestionContent(item) {
     }
     return [suggestionType, name, label];
   }
+  const { origin, destination } = item.properties;
+  const tail1 = origin.locality ? `, ${origin.locality} foobar` : '';
+  const tail2 = destination.locality ? `, ${destination.locality}` : '';
+  const name1 = origin.name;
+  const name2 = destination.name;
   return [
     i18next.t('future-route'),
-    `${i18next.t('origin')} ${item.properties.origin.name}, ${
-      item.properties.origin.locality
-    }, ${i18next.t('destination')} ${item.properties.destination.name}, ${
-      item.properties.destination.locality
-    }`,
+    `${i18next.t('origin')} ${name1}${tail1} ${i18next.t(
+      'destination',
+    )} ${name2}${tail2}`,
     item.translatedText,
   ];
 }
@@ -207,6 +209,9 @@ class DTAutosuggest extends React.Component {
       stopsPrefix: PropTypes.string,
     }),
     mobileLabel: PropTypes.string,
+    lock: PropTypes.func.isRequired,
+    unlock: PropTypes.func.isRequired,
+    refPoint: PropTypes.object,
   };
 
   static defaultProps = {
@@ -230,7 +235,6 @@ class DTAutosuggest extends React.Component {
 
   constructor(props) {
     super(props);
-    i18next.changeLanguage(props.lang);
     moment.tz.setDefault(props.timeZone);
     moment.locale(props.lang);
 
@@ -239,7 +243,6 @@ class DTAutosuggest extends React.Component {
       suggestions: [],
       editing: false,
       valid: true,
-      pendingCurrentLocation: false,
       renderMobileSearch: false,
       sources: props.sources,
       ownPlaces: false,
@@ -261,8 +264,8 @@ class DTAutosuggest extends React.Component {
     return !isEqual(nextState, this.state) || !isEqual(nextProps, this.props);
   }
 
-  componentDidUpdate = prevProps => {
-    if (prevProps.lang !== this.props.lang) {
+  componentDidUpdate = () => {
+    if (i18next.language !== this.props.lang) {
       i18next.changeLanguage(this.props.lang);
     }
   };
@@ -348,16 +351,6 @@ class DTAutosuggest extends React.Component {
         );
         return;
       }
-      if (this.props.handleViaPoints) {
-        this.props.handleViaPoints(
-          suggestionToLocation(ref.suggestion),
-          ref.suggestionIndex,
-        );
-        this.setState({
-          renderMobileSearch: false,
-          suggestions: [],
-        });
-      }
       this.setState(
         {
           editing: false,
@@ -365,15 +358,17 @@ class DTAutosuggest extends React.Component {
         },
         () => {
           this.input.blur();
-          if (!this.props.handleViaPoints) {
+          if (this.props.handleViaPoints) {
+            this.props.handleViaPoints(ref.suggestion, ref.suggestionIndex);
+          } else {
             this.props.onSelect(ref.suggestion, this.props.id);
-            this.setState({
-              renderMobileSearch: false,
-              sources: this.props.sources,
-              ownPlaces: false,
-              suggestions: [],
-            });
           }
+          this.setState({
+            renderMobileSearch: false,
+            sources: this.props.sources,
+            ownPlaces: false,
+            suggestions: [],
+          });
           if (this.props.focusChange && !this.props.isMobile) {
             this.props.focusChange();
           }
@@ -552,6 +547,7 @@ class DTAutosuggest extends React.Component {
             }
           },
           this.props.pathOpts,
+          this.props.refPoint,
         );
       },
     );
@@ -639,6 +635,7 @@ class DTAutosuggest extends React.Component {
   };
 
   closeMobileSearch = () => {
+    this.props.unlock();
     this.setState(
       {
         renderMobileSearch: false,
@@ -654,12 +651,12 @@ class DTAutosuggest extends React.Component {
   // DT-3263 starts
   // eslint-disable-next-line consistent-return
   keyDown = event => {
+    if (this.state.editing) {
+      return this.inputClicked();
+    }
     const keyCode = event.keyCode || event.which;
     if ((keyCode === 13 || keyCode === 40) && this.state.value === '') {
       return this.clearInput();
-    }
-    if (this.state.editing) {
-      return this.inputClicked();
     }
 
     if (keyCode === 40 && this.state.value !== '') {
@@ -717,25 +714,32 @@ class DTAutosuggest extends React.Component {
   onFocus = () => {
     const positions = [
       'Valittu sijainti',
+      'Nykyinen sijaintisi',
       'Current position',
       'Selected location',
       'Vald position',
       'Använd min position',
+      'Min position',
       'Käytä nykyistä sijaintia',
       'Use current location',
+      'Your current location',
     ];
     if (positions.includes(this.state.value)) {
       this.clearInput();
     }
+    const scrollY = window.pageYOffset;
+    if (this.props.isMobile) {
+      this.props.lock();
+    }
     return this.setState({
       renderMobileSearch: this.props.isMobile,
-      scrollY: window.pageYOffset,
+      scrollY,
     });
   };
 
   render() {
-    if (this.state.pendingCurrentLocation) {
-      return <Loading />;
+    if (i18next.language !== this.props.lang) {
+      i18next.changeLanguage(this.props.lang);
     }
     const {
       value,
@@ -887,4 +891,6 @@ class DTAutosuggest extends React.Component {
   }
 }
 
-export default DTAutosuggest;
+const DTAutosuggestWithScrollLock = withScrollLock(DTAutosuggest);
+
+export default DTAutosuggestWithScrollLock;
