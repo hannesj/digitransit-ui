@@ -2,14 +2,14 @@
 import safeJsonParse from '../util/safeJsonParser';
 import { BIKEAVL_WITHMAX } from '../util/citybikes';
 
-const CONFIG = process.env.CONFIG || 'default';
+const CONFIG = 'osijek';
 const API_URL = process.env.API_URL || 'https://api.cityrouting.e-gpp.hr';
 const GEOCODING_BASE_URL = `${API_URL}/geocoding/v1`;
 const MAP_URL = process.env.MAP_URL || 'https://api.maptiler.com/maps/basic/';
 const APP_PATH = process.env.APP_CONTEXT || '';
 const { SENTRY_DSN } = process.env;
 const PORT = process.env.PORT || 8080;
-const APP_DESCRIPTION = 'Digitransit journey planning UI';
+const APP_DESCRIPTION = 'Dobrodošli u lokalnu navigaciju grada osijeka';
 const OTP_TIMEOUT = process.env.OTP_TIMEOUT || 12000;
 const YEAR = 1900 + new Date().getYear();
 const realtime = require('./realtimeUtils').default;
@@ -152,8 +152,8 @@ export default {
   minTransferTime: 120,
   optimize: 'GREENWAYS',
   transferPenalty: 0,
-  availableLanguages: ['fi', 'sv', 'en', 'fr', 'nb', 'de', 'da', 'es', 'ro'],
-  defaultLanguage: 'en',
+  availableLanguages: ['hr', 'en'],
+  defaultLanguage: 'hr',
   // This timezone data will expire in 2037
   timezoneData:
     'Europe/Helsinki|EET EEST|-20 -30|0101010101010101010101010101010101010|22k10 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00|12e5',
