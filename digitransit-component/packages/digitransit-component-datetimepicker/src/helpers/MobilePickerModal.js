@@ -82,7 +82,7 @@ function MobilePickerModal({
             className={styles['departure-now-button']}
             onClick={onNowClick}
           >
-            Lähtö nyt
+            {i18next.t('departure-now', translationSettings)}
           </button>
         </div>
         <div className={styles['tab-row']}>
