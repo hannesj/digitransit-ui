@@ -31,6 +31,17 @@ const translations = {
     home: 'Koti',
     work: 'Työ',
   },
+  hr: {
+    'add-destination': 'Postavi kao odredište',
+    'add-favourite': 'Dodaj favorita',
+    'add-home': 'Dodajte dom',
+    'add-place': 'Dodajte mjesto',
+    'add-work': 'Dodajte posao',
+    edit: 'Uredi',
+    'open-favourites': 'Otvori favorite',
+    home: 'Kuća',
+    work: 'Posao',
+  },
   sv: {
     'add-destination': 'Ställa in som destination',
     'add-favourite': 'Lägg till favorit',

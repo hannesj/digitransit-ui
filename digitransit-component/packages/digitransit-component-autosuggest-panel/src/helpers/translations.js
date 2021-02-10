@@ -43,6 +43,21 @@ const translations = {
     'via-point-index': 'Välipiste {{index}}',
     'viapoint-slack-amount': 'Pysähdyksen kesto',
   },
+  hr: {
+    'add-via-button-label': 'Dodaj koristeći točku',
+    'add-via-duration-button-label':
+      'Postavite trajanje zaustavljanja na točki {{index}}',
+    'add-via-duration-button-label-close':
+      'Zatvorite birač trajanja zaustavljanja na točki {{index}}',
+    'add-via-duration-button-label-open':
+      'Otvorite birač trajanja zaustavljanja na točki {{index}}',
+    'minute-short': 'min',
+    'remove-via-button-label': 'Ukloni točku {{index}}',
+    'swap-order-button-label': 'Zamjeni polazište i odredište ',
+    'via-point': 'Koristeći točku',
+    'via-point-index': 'Točka {{index}}',
+    'viapoint-slack-amount': 'Trajanje zaustavljanja',
+  },
   sv: {
     'add-via-button-label': 'Lägg till viapunkt',
     'add-via-duration-button-label':
