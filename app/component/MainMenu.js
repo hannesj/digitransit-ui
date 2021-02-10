@@ -52,8 +52,9 @@ function MainMenu(props, { config, intl }) {
       )}
       <MainMenuLinks
         content={(
-          [config.appBarLink].concat(config.footer && config.footer.content) ||
-          []
+          [...config.appBarLinks].concat(
+            config.footer && config.footer.content,
+          ) || []
         ).filter(item => item.href || item.route)}
       />
       {config.allowLogin &&
