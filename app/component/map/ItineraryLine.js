@@ -231,6 +231,7 @@ export default createFragmentContainer(ItineraryLine, {
       route {
         shortName
         color
+        textColor
         agency {
           name
         }

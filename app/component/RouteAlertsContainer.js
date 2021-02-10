@@ -107,6 +107,7 @@ const containerComponent = createFragmentContainer(RouteAlertsContainer, {
     fragment RouteAlertsContainer_route on Route
     @argumentDefinitions(date: { type: "String" }) {
       color
+      textColor
       mode
       shortName
       alerts {

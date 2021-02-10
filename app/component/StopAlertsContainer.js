@@ -53,6 +53,7 @@ const containerComponent = createFragmentContainer(StopAlertsContainer, {
         longName
         mode
         color
+        textColor
         alerts {
           id
           alertDescriptionText
@@ -148,6 +149,7 @@ const containerComponent = createFragmentContainer(StopAlertsContainer, {
           }
           route {
             color
+            textColor
             mode
             shortName
             gtfsId

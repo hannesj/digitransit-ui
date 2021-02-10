@@ -130,6 +130,7 @@ const containerComponent = createFragmentContainer(StopPageTabContainer, {
             longName
             mode
             color
+            textColor
             alerts {
               id
               alertDescriptionText
@@ -166,6 +167,7 @@ const containerComponent = createFragmentContainer(StopPageTabContainer, {
         longName
         mode
         color
+        textColor
         alerts {
           id
           alertDescriptionText

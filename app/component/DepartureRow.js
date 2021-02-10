@@ -28,14 +28,23 @@ const DepartureRow = (
   }
   return (
     <div role="cell" className={cx('departure-row', mode)}>
-      <div className="route-number-container">
-        <div
-          className="route-number"
-          style={{ backgroundColor: `#${departure.trip.route.color}` }}
-        >
-          {departure.trip.route.shortName}
+      {departure.trip.route.shortName && (
+        <div className="route-number-container">
+          <div
+            className="route-number"
+            style={{
+              backgroundColor: departure.trip.route.color
+                ? `#${departure.trip.route.color}`
+                : undefined,
+              color: departure.trip.route.textColor
+                ? `#${departure.trip.route.textColor}`
+                : undefined,
+            }}
+          >
+            {departure.trip.route.shortName}
+          </div>
         </div>
-      </div>
+      )}
       <div className="route-headsign">{departure.headsign}</div>
       {shownTime && (
         <div

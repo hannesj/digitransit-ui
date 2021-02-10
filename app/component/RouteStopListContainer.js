@@ -137,6 +137,7 @@ const containerComponent = createRefetchContainer(
         route {
           mode
           color
+          textColor
         }
         stops {
           alerts {

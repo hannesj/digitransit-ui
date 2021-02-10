@@ -113,6 +113,7 @@ export default createFragmentContainer(RouteLine, {
       route {
         mode
         color
+        textColor
       }
       stops {
         lat

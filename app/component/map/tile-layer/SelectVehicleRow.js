@@ -78,6 +78,7 @@ const containerComponent = createFragmentContainer(SelectVehicleRow, {
         shortName
         longName
         color
+        textColor
       }
     }
   `,

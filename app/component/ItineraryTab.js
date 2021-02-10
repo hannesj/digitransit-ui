@@ -330,6 +330,7 @@ const withRelay = createFragmentContainer(ItineraryTab, {
         route {
           shortName
           color
+          textColor
           gtfsId
           longName
           desc

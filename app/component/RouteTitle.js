@@ -39,6 +39,7 @@ export default createFragmentContainer(withBreakpoint(RouteTitle), {
       gtfsId
       shortName
       color
+      textColor
       mode
       type
     }

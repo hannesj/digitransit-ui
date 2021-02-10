@@ -365,6 +365,7 @@ const containerComponent = createFragmentContainer(
             mode
             shortName
             color
+            textColor
             agency {
               name
             }

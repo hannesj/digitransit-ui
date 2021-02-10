@@ -377,6 +377,7 @@ const refetchContainer = createPaginationContainer(
                         gtfsId
                         mode
                         color
+                        textColor
                         patterns {
                           headsign
                         }

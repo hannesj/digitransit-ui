@@ -177,6 +177,7 @@ const connectedComponent = createFragmentContainer(
           mode
           gtfsId
           color
+          textColor
         }
         pattern {
           code

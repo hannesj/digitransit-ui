@@ -241,6 +241,7 @@ const containerComponent = createFragmentContainer(
           }
           route {
             color
+            textColor
             mode
             shortName
             gtfsId

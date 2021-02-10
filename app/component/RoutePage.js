@@ -476,6 +476,7 @@ const containerComponent = createFragmentContainer(withBreakpoint(RoutePage), {
     @argumentDefinitions(date: { type: "String" }) {
       gtfsId
       color
+      textColor
       shortName
       longName
       mode
