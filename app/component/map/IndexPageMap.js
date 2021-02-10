@@ -31,12 +31,11 @@ function IndexPageMap(
   const originFromURI = parseLocation(match.params.from);
   const destinationFromURI = parseLocation(match.params.to);
   let focusPoint;
-  let initialZoom = 16; // Focus to the selected point
+  let initialZoom = 14; // Focus to the selected point
   const useDefaultLocation =
     (!origin || !origin.lat) && (!destination || !destination.lat);
   if (useDefaultLocation) {
     focusPoint = config.defaultMapCenter || config.defaultEndpoint;
-    initialZoom = 12; // Show default area
   } else if (origin.lat) {
     focusPoint = origin;
   } else if (destination.lat) {
