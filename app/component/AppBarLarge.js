@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { intlShape } from 'react-intl';
-import { matchShape, routerShape } from 'found';
 import ExternalLink from './ExternalLink';
 import DisruptionInfo from './DisruptionInfo';
-import Icon from './Icon';
 import ComponentUsageExample from './ComponentUsageExample';
 import LangSelect from './LangSelect';
 import MessageBar from './MessageBar';
@@ -14,25 +11,7 @@ import { addAnalyticsEvent } from '../util/analyticsUtils';
 import LoginButton from './LoginButton';
 import UserInfo from './UserInfo';
 
-const AppBarLarge = (
-  { titleClicked, logo, user },
-  { router, match, config, intl },
-) => {
-  const openDisruptionInfo = () => {
-    addAnalyticsEvent({
-      category: 'Navigation',
-      action: 'OpenDisruptions',
-      name: null,
-    });
-    router.push({
-      ...match.location,
-      state: {
-        ...match.location.state,
-        disruptionInfoOpen: true,
-      },
-    });
-  };
-
+const AppBarLarge = ({ titleClicked, logo, user }, { config }) => {
   let logoElement;
   if (config.textLogo) {
     logoElement = (
@@ -78,33 +57,17 @@ const AppBarLarge = (
             />
           ))}
 
-        <div className="navi-languages right-border navi-margin">
+        <div className="navi-languages right-border">
           <LangSelect />
         </div>
-        <div className="navi-icons navi-margin padding-horizontal-large">
-          <a
-            className="noborder"
-            onClick={openDisruptionInfo}
-            aria-label={intl.formatMessage({
-              id: 'disruptions',
-              defaultMessage: 'Disruptions',
-            })}
-          >
-            <Icon img="icon-icon_caution" className="caution-topbar" />
-          </a>
-        </div>
-        <div className="padding-horizontal-large navi-margin">
-          <ExternalLink
-            className="external-top-bar"
-            {...config.appBarLink}
-            onClick={() => {
-              addAnalyticsEvent({
-                category: 'Navigation',
-                action: 'OpenServiceHomeLink',
-                name: null,
-              });
-            }}
-          />
+        <div className="navi-margin">
+          {config.appBarLinks.map(item => (
+            <ExternalLink
+              key={item.name}
+              className="external-top-bar margin-horizontal-small"
+              {...item}
+            />
+          ))}
         </div>
       </div>
       <MessageBar />
@@ -127,10 +90,7 @@ AppBarLarge.defaultProps = {
 AppBarLarge.displayName = 'AppBarLarge';
 
 AppBarLarge.contextTypes = {
-  router: routerShape.isRequired,
-  match: matchShape.isRequired,
   config: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
 };
 
 AppBarLarge.description = () => (
