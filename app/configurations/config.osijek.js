@@ -34,10 +34,10 @@ export default {
     API_URL,
     ASSET_URL: process.env.ASSET_URL,
     MAP_URL,
-    OTP: `http://165.227.170.138/otp/routers/default/`,
+    OTP: `https://digitransit-dev.osijek.hr/otp/routers/default/`,
     MAP: { default: MAP_URL },
-    STOP_MAP: `http://165.227.170.138/otp/routers/default/vectorTiles/stations,stops/`,
-    CITYBIKE_MAP: `http://165.227.170.138/otp/routers/default/vectorTiles/bikes/`,
+    STOP_MAP: `https://digitransit-dev.osijek.hr/otp/routers/default/vectorTiles/stations,stops/`,
+    CITYBIKE_MAP: `https://digitransit-dev.osijek.hr/otp/routers/default/vectorTiles/bikes/`,
     FONT:
       'https://fonts.googleapis.com/css?family=Lato:300,400,900%7CPT+Sans+Narrow:400,700',
     PELIAS: `${process.env.GEOCODING_BASE_URL || GEOCODING_BASE_URL}/search`,
@@ -55,7 +55,7 @@ export default {
 
   appBarLinks: [
     { name: 'Grad Osijek', href: 'https://www.osijek.hr/' },
-    { name: 'GPP', href: 'http://www.gpp-osijek.com/' },
+    { name: 'GPP', href: 'https://www.gpp-osijek.com/' },
     { name: 'HŽPP', href: 'https://prodaja.hzpp.hr/' },
     { name: 'Flixbus', href: 'https://global.flixbus.com/' },
   ],
@@ -248,7 +248,7 @@ export default {
     showStopMarkerPopupOnMobile: true, // DT-3470
     showScaleBar: true, // DT-3470
     attribution:
-      '<a tabIndex="-1" href="http://osm.org/copyright">© OpenStreetMap</a>', // DT-3470, DT-3397
+      '<a tabIndex="-1" href="https://osm.org/copyright">© OpenStreetMap</a>', // DT-3470, DT-3397
 
     useModeIconsInNonTileLayer: false,
   },
