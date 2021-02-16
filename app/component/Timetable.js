@@ -118,7 +118,10 @@ class Timetable extends React.Component {
           .filter(st => st.pickupType !== 'NONE')
           .map(st => ({
             id: stoptime.pattern.code,
-            name: stoptime.pattern.route.shortName || stoptime.pattern.headsign,
+            name:
+              stoptime.pattern.route.shortName ||
+              stoptime.pattern.headsign ||
+              stoptime.pattern.route.longName,
             scheduledDeparture: st.scheduledDeparture,
             serviceDay: st.serviceDay,
             headsign: stoptime.pattern.headsign,

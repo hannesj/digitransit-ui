@@ -45,7 +45,9 @@ const DepartureRow = (
           </div>
         </div>
       )}
-      <div className="route-headsign">{departure.headsign}</div>
+      <div className="route-headsign">
+        {departure.headsign || departure.trip.route.longName}
+      </div>
       {shownTime && (
         <div
           className={cx('route-arrival', {

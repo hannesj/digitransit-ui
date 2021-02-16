@@ -374,6 +374,7 @@ const refetchContainer = createPaginationContainer(
                     trip {
                       route {
                         shortName
+                        longName
                         gtfsId
                         mode
                         color
@@ -412,6 +413,7 @@ const refetchContainer = createPaginationContainer(
                       trip {
                         route {
                           shortName
+                          longName
                           gtfsId
                           mode
                           patterns {

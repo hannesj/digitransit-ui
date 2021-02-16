@@ -280,7 +280,7 @@ export default {
       'osijek-bikes': {
         icon: 'citybike',
         name: {
-          hr: 'Osijek Bike Share',
+          hr: 'Gradski bicikl',
           en: 'Osijek Bike Share',
         },
         type: 'citybike',
@@ -292,7 +292,7 @@ export default {
       'osijek-cars': {
         icon: 'citybike-secondary',
         name: {
-          hr: 'Osijek Car Share',
+          hr: 'Gradski automobil',
           en: 'Osijek Car Share',
         },
         type: 'citybike',
@@ -625,8 +625,8 @@ export default {
 
   includeBikeSuggestions: true,
 
-  showNearYouButtons: false,
-  nearYouModes: [],
+  showNearYouButtons: true,
+  nearYouModes: ['bus', 'tram', 'rail', 'citybike'],
 
   zoneIconsAsSvg: false,
 
