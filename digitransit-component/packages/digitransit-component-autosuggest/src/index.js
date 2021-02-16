@@ -282,8 +282,10 @@ class DTAutosuggest extends React.Component {
 
   onChange = (event, { newValue, method }) => {
     const newState = {
-      value: newValue || '',
+      value: this.fInput || newValue || '',
     };
+    // Remove filled input value so it wont be reused unnecessary
+    this.fInput = null;
     if (!this.state.editing) {
       newState.editing = true;
       this.setState(newState, () =>
@@ -613,6 +615,21 @@ class DTAutosuggest extends React.Component {
     }
   };
 
+  // Fill input when user clicks fill input button in street suggestion item
+  fillInput = newValue => {
+    this.fInput = newValue.properties.name;
+    const newState = {
+      editing: true,
+      value: newValue.properties.name,
+      checkPendingSelection: newValue,
+      valid: true,
+    };
+    // must update suggestions
+    this.setState(newState);
+    this.fetchFunction({ value: newValue.properties.name });
+    this.input.focus();
+  };
+
   renderItem = item => {
     const newItem =
       item.type === 'FutureRoute'
@@ -630,6 +647,7 @@ class DTAutosuggest extends React.Component {
         isMobile={this.props.isMobile}
         ariaFavouriteString={i18next.t('favourite')}
         color={this.props.color}
+        fillInput={this.fillInput}
       />
     );
   };
@@ -651,10 +669,15 @@ class DTAutosuggest extends React.Component {
   // DT-3263 starts
   // eslint-disable-next-line consistent-return
   keyDown = event => {
+    const keyCode = event.keyCode || event.which;
+
     if (this.state.editing) {
+      if (keyCode === 13) {
+        this.fetchFunction({ value: this.state.value });
+      }
       return this.inputClicked();
     }
-    const keyCode = event.keyCode || event.which;
+
     if ((keyCode === 13 || keyCode === 40) && this.state.value === '') {
       return this.clearInput();
     }
