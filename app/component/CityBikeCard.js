@@ -27,7 +27,7 @@ const CityBikeCard = (
 
   const description = [
     getCityBikeNetworkName(networkConfig, language),
-    config.cityBike.showStationId ? station.stationId : station.name,
+    config.cityBike.showStationId ? station.stationId : '',
   ]
     .join(' ')
     .trim();

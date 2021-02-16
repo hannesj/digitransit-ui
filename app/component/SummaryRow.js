@@ -135,7 +135,7 @@ export const ModeLeg = (
   { config },
 ) => {
   let networkIcon;
-  if (mode === 'BICYCLE' && leg.from.bikeRentalStation) {
+  if (mode === 'CITYBIKE' && leg.from.bikeRentalStation) {
     networkIcon =
       leg.from.bikeRentalStation &&
       getCityBikeNetworkIcon(
