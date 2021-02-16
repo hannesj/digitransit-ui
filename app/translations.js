@@ -2722,6 +2722,7 @@ const translations = {
     'cyclewalk-distance-duration': 'Gurajte bicikl {distance} ({duration})',
     datasources: 'Podatkovni izvori',
     date: 'Datum',
+    day: 'Dan',
     delete: 'Ukloni',
     'departure-is-canceled': '{modeInfo} {from}–{to} u {time} je otkazan',
     'departure-is-canceled-airplane': 'Let {shortName}',
@@ -3058,6 +3059,7 @@ const translations = {
     'select-map-layers-header': 'Što želite prikazati na karti?',
     'select-position': 'Odaberi lokaciju iz prijašnjih pretraživanja',
     'select-route': 'Odaberite {mode} rute {shortName} do {headsign}',
+    'selected-routes': 'Odabrane rute',
     send: 'Pošalji',
     'separate-ticket-required': 'Zasebna karta je potrebna za ovaj dio puta.',
     'separate-ticket-required-disclaimer':
